@@ -1,1 +1,1 @@
-#We a little silly, a tad goofy.
+We a little silly, a tad goofy.
