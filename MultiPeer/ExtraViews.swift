@@ -172,11 +172,87 @@ struct SingleRow : View {
     }
 }
 
-/*
-struct ViewProvider_Previews: PreviewProvider {
-    static var previews: some View {
-        SingleRow(userID: MCPeerID(displayName: "certified ID moment"))
-            .frame(width: 400, height: 50)
+struct BottomBar: View{
+///Change to binding for final iteration
+///  |  |
+///  |  |
+/// \      /
+///  \  /
+    @State var selectedPeers : [MCPeerID?]
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+    var body: some View{
+        GeometryReader{ geo in
+            HStack{
+                VStack{
+                    //title & version #
+                    Text("v\(appVersion ?? "0.0")" )
+                }
+                .frame(width: geo.size.width * 0.325, height: geo.size.height)
+                //.background(.cyan)
+                
+                Spacer()
+                
+                VStack{
+                    //drone & cams button
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(height: geo.size.height * 0.4)
+                        .padding(2)
+                    RoundedRectangle(cornerRadius: 10)
+                        .frame(height: geo.size.height * 0.4)
+                        .padding(2)
+                    
+                }
+                .contentShape(Rectangle())
+                .frame(width: geo.size.width * 0.325, height: geo.size.height)
+                .onTapGesture {
+                    print("drone/cams")
+                }
+                //.background(.mint)
+                
+                Spacer()
+                
+                VStack{
+                    //call button
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundColor(.clear)
+                        VStack{
+                            Image(systemName: "iphone.radiowaves.left.and.right")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundColor(.white)
+                                .padding()
+                            Text("Call :)")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                        }
+                    }
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 5).foregroundColor(.orange))
+                    .padding(10)
+                    
+                }
+                .contentShape(Rectangle())
+                .frame(width: geo.size.width * 0.325, height: geo.size.height)
+                .onTapGesture {
+                    print("called")
+                }
+                //.background(.indigo)
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+            //.cornerRadius(10)
+        }
     }
 }
-*/
+
+struct ViewProvider_Previews: PreviewProvider {
+    static var previews: some View {
+        GeometryReader{geo in
+            VStack{
+                Spacer()
+                BottomBar(selectedPeers: [])
+                    .frame(width: geo.size.width, height: 175)
+            }
+            .preferredColorScheme(.dark)
+        }
+    }
+}
