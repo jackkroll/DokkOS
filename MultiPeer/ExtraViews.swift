@@ -108,7 +108,7 @@ struct SinglePixel: View{
     }
 }
 struct SingleRow : View {
-    @State var toggled = true
+    @State var toggled = false
     @State var userID : MCPeerID
     @State var ally = false
     @Binding var selected : [MCPeerID]
@@ -173,77 +173,89 @@ struct SingleRow : View {
 }
 
 struct BottomBar: View{
-///Change to binding for final iteration
+///Ensureto binding for final iteration
 ///  |  |
 ///  |  |
 /// \      /
 ///  \  /
-    @State var selectedPeers : [MCPeerID?]
+    @Binding var selectedPeers : [MCPeerID]
+    @State var peersVm: PeersVm
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     var body: some View{
-        GeometryReader{ geo in
-            HStack{
-                VStack{
-                    //title & version #
-                    Text("v\(appVersion ?? "0.0")" )
-                }
-                .frame(width: geo.size.width * 0.325, height: geo.size.height)
-                //.background(.cyan)
-                
-                Spacer()
-                
-                VStack{
-                    //drone & cams button
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(height: geo.size.height * 0.4)
-                        .padding(2)
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(height: geo.size.height * 0.4)
-                        .padding(2)
+        ZStack{
+            Color("GreyBlue")
+                .ignoresSafeArea(.all)
+            GeometryReader{ geo in
+                HStack{
+                    VStack{
+                        Image("Dokk")
+                            .resizable()
+                            .scaledToFit()
+                        Text("DokkOS")
+                            .fontWeight(.bold)
+                        Text("v\(appVersion ?? "0.0")" )
+                    }
+                    .foregroundColor(Color("Orange"))
+                    .frame(width: geo.size.width * 0.325, height: geo.size.height)
+                    //.background(.cyan)
                     
-                }
-                .contentShape(Rectangle())
-                .frame(width: geo.size.width * 0.325, height: geo.size.height)
-                .onTapGesture {
-                    print("drone/cams")
-                }
-                //.background(.mint)
-                
-                Spacer()
-                
-                VStack{
-                    //call button
-                    ZStack{
+                    Spacer()
+                    
+                    VStack{
+                        //drone & cams button
                         RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(.clear)
-                        VStack{
-                            Image(systemName: "iphone.radiowaves.left.and.right")
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundColor(.white)
-                                .padding()
-                            Text("Call :)")
-                                .font(.title3)
-                                .fontWeight(.semibold)
+                            .frame(height: geo.size.height * 0.4)
+                            .padding(2)
+                        RoundedRectangle(cornerRadius: 10)
+                            .frame(height: geo.size.height * 0.4)
+                            .padding(2)
+                        
+                    }
+                    .contentShape(Rectangle())
+                    .frame(width: geo.size.width * 0.325, height: geo.size.height)
+                    .onTapGesture {
+                        print("drone/cams")
+                    }
+                    //.background(.mint)
+                    
+                    Spacer()
+                    
+                    VStack{
+                        //call button
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 10)
+                                .foregroundColor(.clear)
+                            VStack{
+                                Image(systemName: "iphone.radiowaves.left.and.right")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .foregroundColor(.white)
+                                    .padding()
+                                Text("Call :)")
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 5).foregroundColor(Color("Orange")))
+                        .padding(10)
+                        
+                    }
+                    .contentShape(Rectangle())
+                    .frame(width: geo.size.width * 0.325, height: geo.size.height)
+                    .onTapGesture {
+                        print("called")
+                        Task{
+                            peersVm.peersController.sendMessage(["callStatus": true], viaStream: true, peersToSend: selectedPeers)
                         }
                     }
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 5).foregroundColor(.orange))
-                    .padding(10)
                     
                 }
-                .contentShape(Rectangle())
-                .frame(width: geo.size.width * 0.325, height: geo.size.height)
-                .onTapGesture {
-                    print("called")
-                }
-                //.background(.indigo)
+                .frame(width: geo.size.width, height: geo.size.height)
             }
-            .frame(width: geo.size.width, height: geo.size.height)
-            //.cornerRadius(10)
         }
     }
 }
-
+/*
 struct ViewProvider_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{geo in
@@ -251,8 +263,10 @@ struct ViewProvider_Previews: PreviewProvider {
                 Spacer()
                 BottomBar(selectedPeers: [])
                     .frame(width: geo.size.width, height: 175)
+                    .ignoresSafeArea(.all)
             }
             .preferredColorScheme(.dark)
         }
     }
 }
+*/

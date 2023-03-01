@@ -13,39 +13,20 @@ struct PeersView: View {
         ZStack{
             BackgroundEffect(scaleEffect: 20, rotationAngle: -33)
             GeometryReader{ geo in
-                VStack(alignment:.center){
-                    HStack{
-                        Spacer()
-                        ForEach(peersVm.peersController.session.connectedPeers, id: \.self){peer in
-                            SingleRow(userID: peer, selected: $selectedPeers)
-                                .frame(width: geo.size.width , height: 50)
-                                .padding(3)
-                            Spacer()
-                        }
-                    }
-                    Text("Send")
-                        .frame(width: geo.size.width * 0.9, height: 60)
-                        .foregroundColor(.black)
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .background(selectedPeers.count > 0 ? .orange : .gray)
-                        .cornerRadius(15)
-                        .padding()
-                        .onTapGesture {
-                            print("Yes")
-                            Task{
-                                print("Functioning")
-                                peersVm.peersController.sendMessage(["callStatus": true], viaStream: true, peersToSend: selectedPeers)
-                            }
-                            
-                        }
-                    //.disabled(!(selectedPeers.count > 0))
-                    
+                VStack{
+                ForEach(peersVm.peersController.session.connectedPeers, id: \.self){peer in
+                        SingleRow(userID: peer, selected: $selectedPeers)
+                            .frame(width: geo.size.width , height: 50)
+                }
                     Spacer()
-                    Text("Your ID: \(UIDevice.current.identifierForVendor?.uuidString.description ?? "Idfk")")
+                    
+                    BottomBar(selectedPeers: $selectedPeers, peersVm: peersVm)
+                        .frame(width: geo.size.width , height: 175)
+                        //.ignoresSafeArea(.all)
+                        
+                    //.disabled(!(selectedPeers.count > 0))
                 }
                 .preferredColorScheme(.dark)
-                .padding()
                 .sheet(isPresented: $peersVm.beingCalled){
                     ZStack{
                         HackPattern()

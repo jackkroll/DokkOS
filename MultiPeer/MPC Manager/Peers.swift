@@ -47,7 +47,9 @@ extension PeersVm: PeersControllerDelegate {
                 peerList += streamed ? "💧" : "⚡️"
             }
         }
-        self.peersList = peerList
+        withAnimation{
+            self.peersList = peerList
+        }
     }
 
 
