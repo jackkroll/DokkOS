@@ -18,7 +18,7 @@ public class PeersController: NSObject {
     ///        _xxxxx._ucp
     ///        _xxxxx._tcp
     ///
-    let serviceType = "multipeer-test"
+    let serviceType = "dokk-oss"
 
     private let myPeerID = MCPeerID(displayName: UIDevice.current.identifierForVendor?.uuidString.description ?? "NoDeviceIdentifier")
     private let startTime = Date().timeIntervalSince1970

@@ -4,8 +4,8 @@
 <dict>
 	<key>NSBonjourServices</key>
 	<array>
-		<string>_multipeer-test._tcp</string>
-		<string>_multipeer-test._udp</string>
+		<string>_dokk-os._tcp</string>
+		<string>_dokk-os._udp</string>
 	</array>
 </dict>
 </plist>

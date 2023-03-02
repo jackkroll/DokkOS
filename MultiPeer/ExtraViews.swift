@@ -200,7 +200,7 @@ struct BottomBar: View{
                     //.background(.cyan)
                     
                     Spacer()
-                    
+                    /*
                     VStack{
                         //drone & cams button
                         RoundedRectangle(cornerRadius: 10)
@@ -217,6 +217,7 @@ struct BottomBar: View{
                         print("drone/cams")
                     }
                     //.background(.mint)
+                    */
                     
                     Spacer()
                     
