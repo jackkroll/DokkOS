@@ -14,15 +14,43 @@ struct PeersView: View {
             BackgroundEffect(scaleEffect: 20, rotationAngle: -33)
             GeometryReader{ geo in
                 VStack{
-                ForEach(peersVm.peersController.session.connectedPeers, id: \.self){peer in
-                        SingleRow(userID: peer, selected: $selectedPeers)
-                            .frame(width: geo.size.width , height: 50)
-                }
+                    GeometryReader{ userLength in
+                        VStack(spacing: 10){
+                            ForEach(peersVm.peersController.session.connectedPeers, id: \.self){peer in
+                                SingleRow(userID: peer, selected: $selectedPeers)
+                                    .frame(width: geo.size.width , height: 50)
+                            }
+                        }
+                        .coordinateSpace(name: "connectedUsers")
+                        .gesture(
+                            DragGesture()
+                                .onChanged{position in
+                                    let perUserPx : CGFloat = 55
+                                    let startIndex = Int(position.startLocation.y/perUserPx)
+                                    var currentIndex = Int(position.location.y/perUserPx)
+                                    if currentIndex > peersVm.peersController.session.connectedPeers.count - 1{
+                                        currentIndex = peersVm.peersController.session.connectedPeers.count - 1
+                                    }
+                                    print(currentIndex)
+                                    
+                                    if !(startIndex > currentIndex){
+                                        for number in (startIndex...currentIndex){
+                                            if !selectedPeers.contains(peersVm.peersController.session.connectedPeers[number]){
+                                                withAnimation{
+                                                    selectedPeers.append(peersVm.peersController.session.connectedPeers[number])
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                        )
+                    }
+                
                     Spacer()
                     
                     BottomBar(selectedPeers: $selectedPeers, peersVm: peersVm)
                         .frame(width: geo.size.width , height: 175)
-                        //.ignoresSafeArea(.all)
+                        .ignoresSafeArea(.all)
                         
                     //.disabled(!(selectedPeers.count > 0))
                 }

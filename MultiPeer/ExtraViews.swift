@@ -108,7 +108,6 @@ struct SinglePixel: View{
     }
 }
 struct SingleRow : View {
-    @State var toggled = false
     @State var userID : MCPeerID
     @State var ally = false
     @Binding var selected : [MCPeerID]
@@ -117,9 +116,9 @@ struct SingleRow : View {
             HStack{
                 Rectangle()
                     .frame(width: 50, height: 50)
-                    .foregroundColor(toggled ? .orange : .gray)
+                    .foregroundColor(selected.contains(userID) ? .orange : .gray)
                     .overlay{
-                        if toggled{
+                        if selected.contains(userID){
                             Image(systemName: "xmark")
                                 .resizable()
                                 .scaledToFit()
@@ -149,7 +148,7 @@ struct SingleRow : View {
                     .frame(height: geo.size.height)
                     .background(Rectangle().stroke(lineWidth: 3))
                 }
-                .background(toggled ? .orange.opacity(0.5) : .clear)
+                .background(selected.contains(userID) ? .orange.opacity(0.5) : .clear)
                 Spacer()
             }
             .padding()
@@ -159,12 +158,13 @@ struct SingleRow : View {
                 withAnimation(.easeInOut(duration: 0.2)){
                     let position : Int? = selected.firstIndex(of: userID)
                     if position != nil{
+                        print("removed")
                         selected.remove(at: position!)
-                        toggled = false
+                        
                     }
                     else{
                         selected.append(userID)
-                        toggled = true
+                        
                     }
                 }
             }
